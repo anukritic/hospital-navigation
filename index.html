@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Department Finder</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.22.9/babel.min.js"></script>
+  <style>
+    body {
+      background-color: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 400px;
+      width: 100%;
+      padding: 24px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      color: #1f2937;
+      margin-bottom: 16px;
+    }
+    .input-group {
+      margin-bottom: 16px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+    }
+    button {
+      width: 100%;
+      padding: 8px;
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #2563eb;
+    }
+    .error {
+      padding: 16px;
+      background-color: #fee2e2;
+      color: #b91c1c;
+      border-radius: 6px;
+      margin-top: 16px;
+    }
+    .result {
+      padding: 16px;
+      background-color: #f9fafb;
+      border-radius: 6px;
+      margin-top: 16px;
+    }
+    .result p {
+      font-size: 18px;
+      margin: 8px 0;
+    }
+    .result p strong {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const departments = {
+      "adult hematology": {
+        room: "81",
+        floor: "Ground",
+        building: "Main building",
+        phone: "8146",
+        navigation: "Go to the main entrance. With your back to the entrance, you will see casualty in front of you. Take a right turn and walk straight. At the end of the corridor, take a left"
+      },
+      "cardiology": {
+        room: "42",
+        floor: "Second",
+        building: "West Wing",
+        phone: "8201",
+        navigation: "Enter through the west entrance. Take the elevator to the second floor. Exit left and follow the signs to room 42."
+      },
+      "neurology": {
+        room: "15",
+        floor: "Third",
+        building: "East Wing",
+        phone: "8356",
+        navigation: "Enter the main entrance, take the stairs to the third floor. Turn right and walk to the end of the hallway."
+      }
+    };
+
+    function App() {
+      const [department, setDepartment] = React.useState("");
+      const [result, setResult] = React.useState(null);
+      const [error, setError] = React.useState("");
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        const dept = department.toLowerCase().trim();
+        if (departments[dept]) {
+          setResult(departments[dept]);
+          setError("");
+        } else {
+          setResult(null);
+          setError("Department not found. Please check the spelling or try another department.");
+        }
+      };
+
+      return (
+        <div className="container">
+          <h1>Hospital Department Finder</h1>
+          <div className="input-group">
+            <input
+              type="text"
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+              placeholder="Enter department name (e.g., Adult hematology)"
+            />
+            <button onClick={handleSubmit}>Find Department</button>
+          </div>
+          {error && (
+            <div className="error">
+              {error}
+            </div>
+          )}
+          {result && (
+            <div className="result">
+              <p><strong>Room number:</strong> {result.room}</p>
+              <p><strong>Floor:</strong> {result.floor}</p>
+              <p><strong>Building:</strong> {result.building}</p>
+              <p><strong>Phone number:</strong> {result.phone}</p>
+              <p><strong>Navigation:</strong> {result.navigation}</p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
